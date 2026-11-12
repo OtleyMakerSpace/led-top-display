@@ -25,6 +25,7 @@ const uint16_t blue = matrix.color565(0, 0, 255);
 const uint16_t magenta = matrix.color565(255, 0, 255);
 const uint16_t cyan = matrix.color565(0, 255, 255);
 const uint16_t white = matrix.color565(255, 255, 255);
+const uint16_t orange = matrix.color565(255, 128, 0);
 
 // serial debug port baud rate
 const unsigned int BAUD_RATE = 115200;
@@ -54,9 +55,9 @@ void loop()
 
   matrix.clearScreen();
   matrix.drawRect(0, 0, PANE_WIDTH, PANE_HEIGHT, white);
-
-  centreText("Hello", centreY - 4, green);
-  centreText("world!", centreY + 4, green);
+  centreText("Otley", centreY - 5, white);
+  centreText("MAKER     ", centreY + 5, blue);
+  centreText("     SPACE", centreY + 5, orange);
 
   matrix.flipDMABuffer();
   delay(1000);
