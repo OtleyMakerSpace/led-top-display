@@ -26,6 +26,8 @@ const uint16_t magenta = matrix.color565(255, 0, 255);
 const uint16_t cyan = matrix.color565(0, 255, 255);
 const uint16_t white = matrix.color565(255, 255, 255);
 const uint16_t orange = matrix.color565(255, 128, 0);
+const uint16_t dark_blue = matrix.color565(0, 0, 128);
+const uint16_t dark_orange = matrix.color565(128, 64, 0);
 
 // serial debug port baud rate
 const unsigned int BAUD_RATE = 115200;
@@ -49,18 +51,36 @@ void setup()
 
 void loop()
 {
-  // testCard();
-  // matrix.flipDMABuffer();
-  // delay(1000);
+  static uint16_t i = 0;
+  const uint16_t dot_colours[] = {blue, blue, dark_blue, dark_blue, orange, orange, dark_orange, dark_orange};
+  const uint8_t num_colours = sizeof(dot_colours) / sizeof(dot_colours[0]);
 
   matrix.clearScreen();
-  matrix.drawRect(0, 0, PANE_WIDTH, PANE_HEIGHT, white);
+
+  for (uint8_t x = 0; x < PANE_WIDTH; x++)
+  {
+    uint16_t col = dot_colours[(x + i) % num_colours];
+    matrix.drawPixel(x, 0, col);
+    matrix.drawPixel(PANE_WIDTH - x, PANE_HEIGHT - 1, col);
+  }
+  for (uint8_t y = 0; y < PANE_HEIGHT; y++)
+  {
+    uint16_t col = dot_colours[(y + i) % num_colours];
+    matrix.drawPixel(PANE_WIDTH - 1, y, col);
+    matrix.drawPixel(0, PANE_HEIGHT - y, col);
+  }
+
   centreText("Otley", centreY - 5, white);
-  centreText("MAKER     ", centreY + 5, blue);
-  centreText("     SPACE", centreY + 5, orange);
+  matrix.setCursor(2, 18);
+  matrix.setTextColor(blue);
+  matrix.print("MAKER");
+  matrix.setCursor(33, 18);
+  matrix.setTextColor(orange);
+  matrix.print("SPACE");
 
   matrix.flipDMABuffer();
-  delay(1000);
+  delay(50);
+  i++;
 }
 
 void testCard()
